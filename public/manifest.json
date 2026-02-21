@@ -1,0 +1,16 @@
+{
+  "name": "Kairox",
+  "short_name": "Kairox",
+  "description": "Software, inteligencia artificial y soluciones digitales.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a12",
+  "theme_color": "#00d4ff",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
