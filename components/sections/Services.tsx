@@ -69,6 +69,11 @@ export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
+  }, []);
 
   useEffect(() => {
     const cards = cardsRef.current?.querySelectorAll(".service-card");
@@ -77,13 +82,13 @@ export default function Services() {
     cards.forEach((card, i) => {
       gsap.fromTo(
         card,
-        { y: 60, opacity: 0 },
+        { y: isMobile ? 30 : 60, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.8,
-          delay: i * 0.2,
-          ease: "power3.out",
+          duration: isMobile ? 0.5 : 0.8,
+          delay: i * (isMobile ? 0.1 : 0.2),
+          ease: "power2.out",
           scrollTrigger: {
             trigger: card,
             start: "top 85%",
@@ -96,7 +101,7 @@ export default function Services() {
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, []);
+  }, [isMobile]);
 
   // Card tilt on mouse move
   const handleMouseMove = (e: React.MouseEvent, cardEl: HTMLElement) => {
@@ -140,7 +145,7 @@ export default function Services() {
         <div
           ref={cardsRef}
           className="grid md:grid-cols-3 gap-4 md:gap-5"
-          style={{ perspective: "1200px" }}
+          style={isMobile ? undefined : { perspective: "1200px" }}
         >
           {services.map((service, i) => {
             const styles = accentStyles[service.accent as keyof typeof accentStyles];
@@ -151,7 +156,7 @@ export default function Services() {
               <div
                 key={service.title}
                 className={`service-card group relative p-6 sm:p-8 rounded-2xl bg-white/[0.02] border ${styles.border} ${styles.glow} transition-all duration-500 ${service.gridClass}`}
-                style={{ willChange: "transform", transformStyle: "preserve-3d" }}
+                style={isMobile ? undefined : { willChange: "transform", transformStyle: "preserve-3d" }}
                 onMouseMove={(e) => handleMouseMove(e, e.currentTarget)}
                 onMouseLeave={(e) => {
                   handleMouseLeave(e.currentTarget);

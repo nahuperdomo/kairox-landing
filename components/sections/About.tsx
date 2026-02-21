@@ -13,26 +13,43 @@ export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const clipRef = useRef<HTMLDivElement>(null);
 
-  // Clip-path reveal animation
+  // Clip-path reveal animation - desktop only
   useEffect(() => {
     const clip = clipRef.current;
     if (!clip) return;
 
-    gsap.fromTo(
-      clip,
-      { clipPath: "inset(100% 0 0 0)" },
-      {
-        clipPath: "inset(0% 0 0 0)",
-        duration: 1.2,
-        ease: "power3.inOut",
-        scrollTrigger: {
-          trigger: clip,
-          start: "top 80%",
-          end: "top 30%",
-          scrub: 1,
-        },
-      }
-    );
+    const isMobile = window.innerWidth < 768 || "ontouchstart" in window;
+
+    if (isMobile) {
+      // Simple fade-in on mobile
+      gsap.fromTo(
+        clip,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: { trigger: clip, start: "top 85%", once: true },
+        }
+      );
+    } else {
+      gsap.fromTo(
+        clip,
+        { clipPath: "inset(100% 0 0 0)" },
+        {
+          clipPath: "inset(0% 0 0 0)",
+          duration: 1.2,
+          ease: "power3.inOut",
+          scrollTrigger: {
+            trigger: clip,
+            start: "top 80%",
+            end: "top 30%",
+            scrub: 1,
+          },
+        }
+      );
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => {

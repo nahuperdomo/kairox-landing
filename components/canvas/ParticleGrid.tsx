@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 interface Particle {
   originX: number;
@@ -17,10 +17,14 @@ export default function ParticleGrid() {
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animFrameRef = useRef<number>(0);
   const isVisibleRef = useRef(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
+  }, []);
 
   const initParticles = useCallback((canvas: HTMLCanvasElement) => {
-    const isMobile = window.innerWidth < 768;
-    const spacing = isMobile ? 60 : 40;
+    const spacing = 40;
     const particles: Particle[] = [];
 
     for (let x = 0; x < canvas.width; x += spacing) {
@@ -40,6 +44,8 @@ export default function ParticleGrid() {
   }, []);
 
   useEffect(() => {
+    if (isMobile) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -70,7 +76,6 @@ export default function ParticleGrid() {
     window.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseleave", handleMouseLeave);
 
-    // Pause when not visible
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisibleRef.current = entry.isIntersecting;
@@ -79,9 +84,8 @@ export default function ParticleGrid() {
     );
     observer.observe(canvas);
 
-    const isMobile = window.innerWidth < 768;
-    const repelRadius = isMobile ? 60 : 100;
-    const repelStrength = isMobile ? 2 : 4;
+    const repelRadius = 100;
+    const repelStrength = 4;
     const returnSpeed = 0.06;
     const friction = 0.85;
 
@@ -102,26 +106,22 @@ export default function ParticleGrid() {
         const dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < repelRadius && !isMobile) {
+        if (dist < repelRadius) {
           const force = (repelRadius - dist) / repelRadius;
           const angle = Math.atan2(dy, dx);
           p.vx -= Math.cos(angle) * force * repelStrength;
           p.vy -= Math.sin(angle) * force * repelStrength;
         }
 
-        // Return to origin
         p.vx += (p.originX / dpr - p.x) * returnSpeed;
         p.vy += (p.originY / dpr - p.y) * returnSpeed;
 
-        // Friction
         p.vx *= friction;
         p.vy *= friction;
 
-        // Update position
         p.x += p.vx;
         p.y += p.vy;
 
-        // Calculate opacity based on distance from origin
         const offsetDist = Math.sqrt(
           (p.x - p.originX / dpr) ** 2 + (p.y - p.originY / dpr) ** 2
         );
@@ -143,13 +143,15 @@ export default function ParticleGrid() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       observer.disconnect();
     };
-  }, [initParticles]);
+  }, [isMobile, initParticles]);
+
+  // Don't render canvas on mobile at all
+  if (isMobile) return null;
 
   return (
     <canvas
       ref={canvasRef}
       className="absolute inset-0 pointer-events-none"
-      style={{ willChange: "transform" }}
     />
   );
 }

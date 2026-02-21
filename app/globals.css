@@ -42,6 +42,22 @@ body {
   body {
     cursor: auto;
   }
+
+  /* Disable heavy background grid on mobile */
+  .bg-grid {
+    background-image: none;
+  }
+
+  /* Disable glow effects on mobile */
+  .glow-cyan,
+  .glow-violet {
+    box-shadow: none;
+  }
+
+  /* Disable animated gradient text on mobile */
+  .text-gradient-animated {
+    animation: none;
+  }
 }
 
 /* Subtle grid background */

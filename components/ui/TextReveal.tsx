@@ -18,20 +18,35 @@ export default function TextReveal({ children, className = "" }: TextRevealProps
     const el = containerRef.current;
     if (!el) return;
 
-    const words = el.querySelectorAll(".reveal-word");
+    const isMobile = window.innerWidth < 768 || "ontouchstart" in window;
 
-    gsap.set(words, { color: "#8888aa" });
-
-    gsap.to(words, {
-      color: "#ffffff",
-      stagger: 0.05,
-      scrollTrigger: {
-        trigger: el,
-        start: "top 75%",
-        end: "bottom 50%",
-        scrub: 1,
-      },
-    });
+    if (isMobile) {
+      // Simple fade-in on mobile instead of per-word scrub
+      gsap.fromTo(
+        el,
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 85%", once: true },
+        }
+      );
+    } else {
+      const words = el.querySelectorAll(".reveal-word");
+      gsap.set(words, { color: "#8888aa" });
+      gsap.to(words, {
+        color: "#ffffff",
+        stagger: 0.05,
+        scrollTrigger: {
+          trigger: el,
+          start: "top 75%",
+          end: "bottom 50%",
+          scrub: 1,
+        },
+      });
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => {

@@ -20,27 +20,31 @@ export default function Contact() {
     const info = infoRef.current;
     if (!form || !info) return;
 
+    const isMobile = window.innerWidth < 768 || "ontouchstart" in window;
+    const duration = isMobile ? 0.5 : 0.8;
+    const yOffset = isMobile ? 20 : 40;
+
     gsap.fromTo(
       form,
-      { y: 40, opacity: 0 },
+      { y: yOffset, opacity: 0 },
       {
         y: 0,
         opacity: 1,
-        duration: 0.8,
-        ease: "power3.out",
+        duration,
+        ease: "power2.out",
         scrollTrigger: { trigger: form, start: "top 85%", once: true },
       }
     );
 
     gsap.fromTo(
       info,
-      { y: 40, opacity: 0 },
+      { y: yOffset, opacity: 0 },
       {
         y: 0,
         opacity: 1,
-        duration: 0.8,
-        delay: 0.15,
-        ease: "power3.out",
+        duration,
+        delay: 0.1,
+        ease: "power2.out",
         scrollTrigger: { trigger: info, start: "top 85%", once: true },
       }
     );

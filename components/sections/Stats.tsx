@@ -16,21 +16,37 @@ export default function Stats() {
     const content = contentRef.current;
     if (!content) return;
 
-    gsap.fromTo(
-      content,
-      { clipPath: "inset(0 50% 0 50%)" },
-      {
-        clipPath: "inset(0 0% 0 0%)",
-        duration: 1,
-        ease: "power3.inOut",
-        scrollTrigger: {
-          trigger: content,
-          start: "top 75%",
-          end: "top 40%",
-          scrub: 1,
-        },
-      }
-    );
+    const isMobile = window.innerWidth < 768 || "ontouchstart" in window;
+
+    if (isMobile) {
+      gsap.fromTo(
+        content,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: { trigger: content, start: "top 85%", once: true },
+        }
+      );
+    } else {
+      gsap.fromTo(
+        content,
+        { clipPath: "inset(0 50% 0 50%)" },
+        {
+          clipPath: "inset(0 0% 0 0%)",
+          duration: 1,
+          ease: "power3.inOut",
+          scrollTrigger: {
+            trigger: content,
+            start: "top 75%",
+            end: "top 40%",
+            scrub: 1,
+          },
+        }
+      );
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => {

@@ -153,32 +153,33 @@ export default function Process() {
 
     // Mobile: simple vertical scroll
     mm.add("(max-width: 767px)", () => {
+      // Simpler, lighter animations on mobile
       const cards = track.querySelectorAll(".process-card");
-      cards.forEach((card, i) => {
+      cards.forEach((card) => {
         gsap.fromTo(
           card,
-          { y: 40, opacity: 0 },
+          { y: 20, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.6,
-            delay: i * 0.15,
-            scrollTrigger: { trigger: card, start: "top 85%", once: true },
+            duration: 0.5,
+            ease: "power2.out",
+            scrollTrigger: { trigger: card, start: "top 90%", once: true },
           }
         );
       });
 
       const benefitCards = results.querySelectorAll(".benefit-card");
-      benefitCards.forEach((card, i) => {
+      benefitCards.forEach((card) => {
         gsap.fromTo(
           card,
-          { y: 30, opacity: 0 },
+          { y: 20, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.5,
-            delay: i * 0.1,
-            scrollTrigger: { trigger: card, start: "top 85%", once: true },
+            duration: 0.4,
+            ease: "power2.out",
+            scrollTrigger: { trigger: card, start: "top 90%", once: true },
           }
         );
       });
