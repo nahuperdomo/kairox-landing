@@ -20,20 +20,10 @@ export default function About() {
 
     const isMobile = window.innerWidth < 768 || "ontouchstart" in window;
 
-    if (isMobile) {
-      // Simple fade-in on mobile
-      gsap.fromTo(
-        clip,
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          ease: "power2.out",
-          scrollTrigger: { trigger: clip, start: "top 85%", once: true },
-        }
-      );
-    } else {
+    // No GSAP on mobile - content visible via CSS
+    if (isMobile) return;
+
+    {
       gsap.fromTo(
         clip,
         { clipPath: "inset(100% 0 0 0)" },

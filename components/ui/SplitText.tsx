@@ -38,29 +38,13 @@ export default function SplitText({
 
     const isMobile = window.innerWidth < 768 || "ontouchstart" in window;
 
+    // No GSAP on mobile - content visible via CSS
     if (isMobile) {
-      // Simple fade-in on mobile instead of per-word/char 3D animation
-      if (trigger === "scroll") {
-        gsap.fromTo(
-          el,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.5,
-            delay,
-            ease: "power2.out",
-            scrollTrigger: { trigger: el, start: "top 85%", once: true },
-          }
-        );
-      } else {
-        gsap.fromTo(
-          el,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, delay, ease: "power2.out" }
-        );
-      }
-    } else {
+      hasAnimated.current = true;
+      return;
+    }
+
+    {
       const elements = el.querySelectorAll(".split-item");
 
       if (trigger === "scroll") {

@@ -18,19 +18,9 @@ export default function Stats() {
 
     const isMobile = window.innerWidth < 768 || "ontouchstart" in window;
 
-    if (isMobile) {
-      gsap.fromTo(
-        content,
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          ease: "power2.out",
-          scrollTrigger: { trigger: content, start: "top 85%", once: true },
-        }
-      );
-    } else {
+    if (isMobile) return;
+
+    {
       gsap.fromTo(
         content,
         { clipPath: "inset(0 50% 0 50%)" },

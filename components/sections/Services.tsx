@@ -76,18 +76,20 @@ export default function Services() {
   }, []);
 
   useEffect(() => {
+    if (isMobile) return;
+
     const cards = cardsRef.current?.querySelectorAll(".service-card");
     if (!cards) return;
 
     cards.forEach((card, i) => {
       gsap.fromTo(
         card,
-        { y: isMobile ? 30 : 60, opacity: 0 },
+        { y: 60, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: isMobile ? 0.5 : 0.8,
-          delay: i * (isMobile ? 0.1 : 0.2),
+          duration: 0.8,
+          delay: i * 0.2,
           ease: "power2.out",
           scrollTrigger: {
             trigger: card,

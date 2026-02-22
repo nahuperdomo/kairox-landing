@@ -58,6 +58,25 @@ body {
   .text-gradient-animated {
     animation: none;
   }
+
+  /*
+   * CRITICAL: Force all content visible on mobile.
+   * Elements use opacity-0 + GSAP to animate in, but if JS is slow
+   * or fails, content stays invisible = blank page.
+   * This ensures content is always visible regardless of JS state.
+   */
+  .hero-subtitle,
+  .hero-cta,
+  .hero-scroll-indicator,
+  .service-card,
+  .process-card,
+  .benefit-card,
+  .split-item,
+  .reveal-word,
+  .mobile-link {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* Subtle grid background */

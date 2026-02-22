@@ -151,38 +151,9 @@ export default function Process() {
       });
     });
 
-    // Mobile: simple vertical scroll
+    // Mobile: no GSAP animations - content visible via CSS
     mm.add("(max-width: 767px)", () => {
-      // Simpler, lighter animations on mobile
-      const cards = track.querySelectorAll(".process-card");
-      cards.forEach((card) => {
-        gsap.fromTo(
-          card,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.5,
-            ease: "power2.out",
-            scrollTrigger: { trigger: card, start: "top 90%", once: true },
-          }
-        );
-      });
-
-      const benefitCards = results.querySelectorAll(".benefit-card");
-      benefitCards.forEach((card) => {
-        gsap.fromTo(
-          card,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.4,
-            ease: "power2.out",
-            scrollTrigger: { trigger: card, start: "top 90%", once: true },
-          }
-        );
-      });
+      // Do nothing - CSS handles visibility
     });
 
     return () => mm.revert();

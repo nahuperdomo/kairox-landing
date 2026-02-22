@@ -20,20 +20,10 @@ export default function TextReveal({ children, className = "" }: TextRevealProps
 
     const isMobile = window.innerWidth < 768 || "ontouchstart" in window;
 
-    if (isMobile) {
-      // Simple fade-in on mobile instead of per-word scrub
-      gsap.fromTo(
-        el,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          ease: "power2.out",
-          scrollTrigger: { trigger: el, start: "top 85%", once: true },
-        }
-      );
-    } else {
+    // No GSAP on mobile - content visible via CSS
+    if (isMobile) return;
+
+    {
       const words = el.querySelectorAll(".reveal-word");
       gsap.set(words, { color: "#8888aa" });
       gsap.to(words, {
